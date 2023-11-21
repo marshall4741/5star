@@ -1,0 +1,42 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>九九乘法表</title>
+    <style>
+
+        table {
+            margin: auto;
+            padding: 0;
+            border: 1px solid blue;
+            background-color: #D2E9FF;
+        }
+        td {
+            margin:0;
+            padding:0;
+            border-right: 1px dotted red;
+            width:10px;
+        }
+    </style>
+</head>
+<body>
+    <table id="ta"></table>
+    <script>
+        /*document.write("<table><tr><td>PID</td><td>PName</td></tr></table>")*/
+        let numF;
+        let numM;
+        let str = "";
+        let str2 = "";
+        for (var i = 2; i < 10; i++) {
+            numF = i;
+            for (var j = 1; j < 10; j++) {
+                numM = j;
+                str += (`${numF}*${numM}=${numF * numM}  `)
+            }
+            str2 += (`<td>${str}</td>`);
+            str = "";
+        }
+        document.getElementById('ta').innerHTML = str2;
+    </script>
+</body>
+</html>

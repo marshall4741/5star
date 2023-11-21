@@ -1,0 +1,178 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>FromChek</title>
+    <style>
+        fieldset {
+            width: 90%;
+            border: 3px solid red;
+            margin: 10px;
+        }
+        .divst1 {
+            width: 95%;
+            border-bottom: 1px dotted #8E8E8E;
+            margin: 10px;
+            padding-bottom: 10px;
+        }
+        .t1 {
+            /*width: 100px;*/
+            float: left;
+            /* border: 1px solid red;*/
+            text-align: center;
+        }
+        .span {
+            font-style: italic;
+            color: red;
+            font-size: small;
+        }
+    </style>
+</head>
+<body>
+    <from>
+        <fieldset>
+            <legend>Form Check</legend>
+            <div class="divst1">
+                <label for="account1" class="t1">姓名：</label>
+                <input type="text" id="name1" autofocus autocomplete="off" />
+                <span id="idsp" class="span"></span><br />
+                <label>( 1.不可空白 2.至少兩個字以上 3.必須全部為中文字 )</label>
+            </div>
+            <div class="divst1">
+                <label for="account2" class="t1">密碼：</label>
+                <input type="password" id="password1" autocomplete="off" />
+                <span id="idsp2" class="span"></span><br />
+                <label>( 1.不可空白 2.至少六個字且必須包含英數字、特殊符號[!@#$%^&*] )</label>
+            </div>
+            <div class="divst1">
+                <label for="account3" class="t1">日期：</label>
+                <input type="text" id="date1" autocomplete="off" />
+                <span id="idsp3" class="span"></span><br />
+                <label>格式：西元年/月/日 (yyyy/mm/dd)</label>
+            </div>
+        </fieldset>
+    </from>
+    <script>
+        document.getElementById("name1").addEventListener("blur", checkName);
+        function checkName() {
+            let nameObj = document.getElementById("name1");          // "label"
+
+            let nameObjVal = nameObj.value;                          // "名字"
+
+            let nameObjValLen = nameObjVal.length;                   // "字數"
+
+            let sp = document.getElementById("idsp");                // "輸入後的提示"
+
+            let ch, flag1 = false;
+
+            let re = /[\u4e00-\u9fff]/; // 所有中文
+
+            if (nameObjVal == "") {
+                sp.innerHTML = "<img src ='images/cross.png'/>不能是空白";
+            }
+            else if (nameObjValLen >= 2) {
+                 for (let i = 0; i < nameObjValLen; i++) {            // 用 for迴圈 檢查"每一個字(ch)"
+                    ch = nameObjVal.charAt(i);                       // 先將 ch 變成密碼的第 i 個字
+
+                    if (re.test(ch)) {                              // 第 i 個字是中文，條件1 = true
+                        flag1 = true;
+                    } else {
+                        flag1 = false;                              // 第 i 個字不是中文，條件1 = false，直接跳出
+                        break;
+                    }
+                 }
+                if (flag1)
+                    sp.innerHTML = "<img src='images/check.png'/>通過";
+                else
+                    sp.innerHTML = "<img src='images/cross.png'/>不通過";
+            }
+            else {
+                sp.innerHTML = "<img src='images/cross.png'/>少餘2個字";
+            }
+        }
+
+        document.getElementById("password1").addEventListener("blur", checkPwd);
+        function checkPwd() {
+            let PwdObj = document.getElementById("password1");          // "label"
+
+            let PwdObjVal = PwdObj.value;                          // "密碼"
+
+            let PwdObjValLen = PwdObjVal.length;                   // "字數"
+
+            let sp = document.getElementById("idsp2");                // "輸入後的提示"
+
+            let en = /[a-zA-Z0-9]/; // 所有英文、數字
+
+            let ss = /[~`!#$%\^&*+=\-\[\]\\';,/{}|\:<>\?]@/;// 所有特殊符號
+
+            let ch, flag1 = false, flag2 = false, flag3 = false;
+
+            if (PwdObjVal == "") {
+                sp.innerHTML = "<img src ='images/cross.png'/>不能是空白";
+            }
+            else if (PwdObjValLen >= 6) {
+                for (let i = 0; i < PwdObjValLen; i++) {            // 用 for迴圈 檢查"每一個字(ch)"
+                    ch = PwdObjVal.charAt(i).toUpperCase();         // 先將 ch 變成密碼的第 i 個字
+
+                    if (ch >= "A" && ch <= "Z") {                                                   // 第 i 個字是字母，條件1 = true
+                        flag1 = true;
+                    }
+                    else if (ch >= "0" && ch <= "9") {                                              // 第 i 個字是數字，條件2 = true
+                        flag2 = true;
+                    }
+                    else if (ch.indexOf("/[~`!#$%\^&*+=\-\[\]\\';,/{}|\:<>\?]@/")) {                // 第 i 個字是特殊符號，條件3 = true
+                        flag3 = true;
+                    }
+                    if (flag1 && flag2 && flag3) break;         // 全部條件都符合就不再檢查了 break
+                }
+                if (flag1 && flag2 && flag3)
+                    sp.innerHTML = "<img src='images/check.png'/>通過"
+                else
+                    sp.innerHTML = "<img src='images/cross.png'/>不通過"
+            }
+            else {
+                sp.innerHTML = "<img src='images/cross.png'/>少餘6個字";
+            }
+        }
+
+        document.getElementById("date1").addEventListener("blur", checkDate);
+        function checkDate() {
+
+            let DateObj = document.getElementById("date1");          // "label"
+
+            let DateObjVal = DateObj.value;                          // "日期"
+
+            let sp = document.getElementById("idsp3");
+
+            let d = new Date(DateObjVal);//輸入的日期
+            //console.log(d);
+
+            var Year = parseInt(DateObjVal.substring(0, 4));    //年
+            var Month = parseInt(DateObjVal.substring(5, 7));   //月
+            var Day = parseInt(DateObjVal.substring(8, 10));    //日
+
+            let nowd = new Date();//現在日期
+            //console.log(nowd);
+
+            let datere = /\d{4}\/\d{2}\/\d{2}/;// 年：4個字，月：2個字，日：2個字
+
+            console.log("DateObjVal.split('/')=" + DateObjVal.split('/'));  // 用"/"分割字串
+
+            if (datere.test(DateObjVal)) {
+                if (d <= nowd) {
+                    if ((Month <= 12 && Month >= 1) && (Day <= 31 && Day >= 1)) {
+                        sp.innerHTML = "<img src='images/check.png'/>正確格式";
+                    }
+                }
+                else {
+                    sp.innerHTML = "<img src='images/cross.png'/>日期不正確";
+                }
+            } else {
+                sp.innerHTML = "<img src='images/cross.png'/>格式不正確";
+            }
+        }
+    </script>
+
+
+</body>
+</html>
